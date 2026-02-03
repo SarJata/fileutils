@@ -1,0 +1,4 @@
+dist
+fileutils.egg-info
+.venv
+.idea

@@ -1,0 +1,14 @@
+[project]
+name = "fileutils"
+version = "0.1.0"
+description = "Small utilities for listing files in directories"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+  {name = "Your Name"}
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

@@ -1,0 +1,8 @@
+README.md
+pyproject.toml
+fileutils/__init__.py
+fileutils/files.py
+fileutils_dir.egg-info/PKG-INFO
+fileutils_dir.egg-info/SOURCES.txt
+fileutils_dir.egg-info/dependency_links.txt
+fileutils_dir.egg-info/top_level.txt

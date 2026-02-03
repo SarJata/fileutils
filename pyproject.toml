@@ -1,12 +1,12 @@
 [project]
-name = "fileutils"
-version = "0.1.0"
+name = "fileutils-dir"
+version = "0.3.0"
 description = "Small utilities for listing files in directories"
 readme = "README.md"
 requires-python = ">=3.9"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
-  {name = "Your Name"}
+  {name = "Jatavallabhula Sarat Anirudh"}
 ]
 
 [build-system]

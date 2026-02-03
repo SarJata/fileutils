@@ -1,6 +1,5 @@
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable
-
 
 FILE_TYPES = {
     "image": [".jpg", ".jpeg", ".png", ".webp", ".bmp", ".gif", ".tiff"],
@@ -9,62 +8,62 @@ FILE_TYPES = {
     "doc": [".doc", ".docx", ".odt"],
     "sheet": [".xls", ".xlsx", ".ods", ".csv"],
     "presentation": [".ppt", ".pptx", ".odp"],
-    "code": [
-        ".py", ".js", ".ts", ".java", ".c", ".cpp", ".h",
-        ".go", ".rs", ".rb", ".php", ".sh"
-    ],
+    "code": [".py", ".js", ".ts", ".java", ".c", ".cpp", ".h", ".go", ".rs", ".rb", ".php", ".sh"],
     "data": [".json", ".yaml", ".yml", ".xml", ".toml"],
     "audio": [".mp3", ".wav", ".flac", ".ogg", ".aac", ".m4a"],
     "video": [".mp4", ".mkv", ".avi", ".mov", ".webm"],
     "archive": [".zip", ".tar", ".gz", ".bz2", ".7z", ".rar"],
 }
 
-
 def in_dir(
-    directories: Iterable[str] | None = None,
-    extensions: Iterable[str] | None = None,
-    types: Iterable[str] | None = None,
+    path=".",
+    *args,
+    ext=None,
+    dtype=None,
 ) -> list[str]:
     """
-    Return files from the given directories:\n.
-    - If 'directories' are not given, only the PWD is considered.
-    - If `extensions` or `types` are provided, only matching files are returned.
-    - If neither is provided, all files in the PWD are returned.
+    "in_dir() accepts only one positional argument (path).
+            Use keyword arguments for filters or leave empty:
+            in_dir(path, ext='filetype')
+            in_dir(path, dtype='data_type')
+    dtype options: image, text, pdf, doc, sheet, presentation, code, data, audio, video, archive
     """
-
-    if directories is None:
-        directories = ["."]
-    if extensions is None:
-        extensions = []
-    if types is None:
-        types = []
+    if args:
+        raise TypeError(
+            "in_dir() accepts only one positional argument (path).\n"
+            "Use keyword arguments for filters or leave empty:\n"
+            "  in_dir(path, ext='filetype')\n"
+            "  in_dir(path, dtype='data_type')"
+        )
+    ext = ext or []
+    dtype = dtype or []
+    
+    if isinstance(ext, str):
+        ext = [ext]
+    if isinstance(dtype, str):
+        dtype = [dtype]
 
     normalized_extensions = {
-        ext.lower() if ext.startswith(".") else f".{ext.lower()}"
-        for ext in extensions
+        e.lower() if e.startswith(".") else f".{e.lower()}"
+        for e in ext
     }
 
-    for file_type in types:
+    for file_type in dtype:
         key = file_type.strip().lower()
-        try:
-            normalized_extensions.update(FILE_TYPES[key])
-        except KeyError:
-            raise ValueError(f"Unknown file type: {file_type}")
+        if key not in FILE_TYPES:
+            raise ValueError(
+                f"Unknown file type: {file_type}. "
+                f"Valid types: {', '.join(FILE_TYPES)}"
+            )
+        normalized_extensions.update(FILE_TYPES[key])
 
-    files_to_return: list[str] = []
+    files: list[str] = []
 
-    for path in directories:
-        for item in Path(path).iterdir():
-            if not item.is_file():
-                continue
+    for item in Path(path).iterdir():
+        if item.is_file() and (
+            not normalized_extensions or item.suffix.lower() in normalized_extensions
+        ):
+            files.append(str(item))
 
-            # If no filters, accept everything
-            if not normalized_extensions:
-                files_to_return.append(str(item))
-                continue
+    return files
 
-            # Otherwise, filter by extension
-            if item.suffix.lower() in normalized_extensions:
-                files_to_return.append(str(item))
-
-    return files_to_return

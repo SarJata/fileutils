@@ -1,3 +1,12 @@
+Metadata-Version: 2.4
+Name: fileutils-dir
+Version: 0.3.0
+Summary: Small utilities for listing files in directories
+Author: Jatavallabhula Sarat Anirudh
+License-Expression: MIT
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+
 # fileutils
 
 A small Python library for filtering and listing files. 
